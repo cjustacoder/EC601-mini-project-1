@@ -9,6 +9,9 @@ import wget
 import urllib.request
 import random
 import string
+import subprocess
+from PIL import Image
+import os
 
 
 def random_string(length):
@@ -110,16 +113,39 @@ def download_media(media_files):
     i = 1
     leng = len(media_files)
     for res in media_files:
-        name = random_string(10) + ".jpg"
+        name = "image" + str(i) + ".jpg"
         urllib.request.urlretrieve(res, location + name)
         print("downloading Numb.", i, '/', leng)
         i += 1
     print("finishing download")
 
 
+def generate_vedio():
+    subprocess.call('ffmpeg -f image2 -framerate 1/5 -y -i ./images/image%d.jpg -c:v libx264 -pix_fmt yuv420p scr.avi', shell=True)
+    pass
+
+
+def resize_image(cd, width, height):
+    os.chdir(cd)
+    for root, dirs, files in os.walk("."):
+        for filename in files:
+            im1 = Image.open(filename)
+            im1 = im1.resize((width, height), Image.ANTIALIAS)  # best down-sizing filter
+            im1.save(filename)
+            print(filename, "modification done")
+    os.chdir("../")
+
+
 twitter_content = get_all_tweets("@ZhongyuanCai")
 url = get_media_url(twitter_content)
 download_media(url)
+resize_image("./images/", 1024, 768)
+generate_vedio()
+
+
+
+
+
 
 
 
