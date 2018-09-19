@@ -10,8 +10,12 @@ import urllib.request
 import random
 import string
 import subprocess
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 import os
+import io
+from google.cloud import vision
+from google.cloud.vision import types
+import sys
 
 
 def random_string(length):
@@ -26,6 +30,13 @@ access_secret = "LGikjWWaCVHQZ9SzBXRrEOlrE0lLfX2RiotNh5KDQuUIn"
 
 
 def get_all_tweets(screen_name):
+    """
+    This function is used for using API to get tweets from twitter from a given user
+    It will also generate two 'json' file, tweet.json is the whole content of tweet, and url.json is list of
+    the whole media resources url.
+    :param screen_name: known as username
+    :return: all content in tweets, tweet_content is a 'List'
+    """
     # Twitter only allows access to a users most recent 3240 tweets with this method
 
     # authorize twitter, initialize tweepy
@@ -101,8 +112,7 @@ def get_media_url(alltweets):
     # print(len(media_files))
     filefile = open('url.json', 'w')
     print("writing url to Json, please wait...")
-    for apple in media_files:
-        json.dump(media_files, filefile)
+    json.dump(media_files, filefile)
     print("done")
     filefile.close()
     return media_files
@@ -120,12 +130,15 @@ def download_media(media_files):
     print("finishing download")
 
 
-def generate_vedio():
-    subprocess.call('ffmpeg -f image2 -framerate 1/5 -y -i ./images/image%d.jpg -c:v libx264 -pix_fmt yuv420p scr.avi', shell=True)
+def generate_video():
+    print("start generating video")
+    subprocess.call('ffmpeg -f image2 -framerate 1/5 -y -i ./images/image%d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4', shell=True)
+    print("video is done")
     pass
 
 
 def resize_image(cd, width, height):
+    direction = os.getcwd()
     os.chdir(cd)
     for root, dirs, files in os.walk("."):
         for filename in files:
@@ -133,19 +146,69 @@ def resize_image(cd, width, height):
             im1 = im1.resize((width, height), Image.ANTIALIAS)  # best down-sizing filter
             im1.save(filename)
             print(filename, "modification done")
-    os.chdir("../")
+    os.chdir(direction)
+
+
+def get_label(cd):
+    client = vision.ImageAnnotatorClient()
+    label_all = []
+    direction = os.getcwd()
+    os.chdir(cd)
+    for root, dirs, files in os.walk("."):
+        for filename in files:
+            print("getting label for", filename)
+            file_name = os.path.join(
+                os.path.dirname(__file__),
+                filename)
+            # Loads the image into memory
+            with io.open(file_name, 'rb') as image_file:
+                content = image_file.read()
+
+            image = types.Image(content=content)
+            # Performs label detection on the image file
+            response = client.label_detection(image=image)
+            labels = response.label_annotations
+            lab = []
+
+            for label in labels:
+                lab.append(label.description)
+            label_all.append(lab)
+    os.chdir(direction)
+    return label_all
+
+
+def add_label(cd, label, fontsize, num):
+    from PIL import Image, ImageDraw, ImageFont, ImageColor
+    # name = './imagetest/image1.jpg'
+    direction = os.getcwd()
+    os.chdir(cd)
+    my_front = ImageFont.truetype("timesbd.ttf", size=fontsize)  # 50
+    i = 0
+    for root, dirs, files in os.walk("."):
+        for filename in files:
+            img = Image.open(filename)
+            print("adding label to", filename)
+            d = ImageDraw.Draw(img)
+
+            if num > len(label):
+                num = len(label)
+            else:
+                pass
+
+            for j in range(num):
+                d.text((10, 10 + j * fontsize), label[i][j], fill=(255, 0, 0), font=my_front)  # recommand j=3
+                pass
+
+            img.save(filename)
+            i += 1
+    os.chdir(direction)
+    pass
 
 
 twitter_content = get_all_tweets("@ZhongyuanCai")
 url = get_media_url(twitter_content)
 download_media(url)
 resize_image("./images/", 1024, 768)
-generate_vedio()
-
-
-
-
-
-
-
-
+label = get_label("./images")
+add_label("./images", label, 50, 3)
+generate_video()
