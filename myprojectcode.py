@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # encoding: utf-8
-# Author - Prateek Mehta
-
 
 import tweepy  # https://github.com/tweepy/tweepy
 import json
@@ -19,26 +17,31 @@ import sys
 
 
 def random_string(length):
+    """
+    generate a certain length of random string(was used for rename the images download)
+    :param length: the length of random string
+    :return: the random string
+    """
     return ''.join(random.choice(string.ascii_letters) for m in range(length))
 
 
-# Twitter API credentials
-consumer_key = "S8LcuILJeofVWZkBilWkYrOYH"
-consumer_secret = "he3oZTTPxDJG3XQdcWCRn16pSwEGfemX5grABi8NwF5LXC4Vbt"
-access_key = "1039257149103394816-0nLYN7S16Ie1DflHcVgmotONLPmiBk"
-access_secret = "LGikjWWaCVHQZ9SzBXRrEOlrE0lLfX2RiotNh5KDQuUIn"
-
-
-def get_all_tweets(screen_name):
+def get_all_tweets(screen_name, filename):
     """
-    This function is used for using API to get tweets from twitter from a given user
+    This function is used for using API to get tweets from twitter from a given user.
+
     It will also generate two 'json' file, tweet.json is the whole content of tweet, and url.json is list of
-    the whole media resources url.
+    the whole media resources url. You need to uncomment the correspondent part to enable these function.
+    part refer to tweetAPIexample from class
     :param screen_name: known as username
+    :param filename: the file which you store your Twitter credential
     :return: all content in tweets, tweet_content is a 'List'
     """
-    # Twitter only allows access to a users most recent 3240 tweets with this method
-
+    # Twitter authentication get
+    authent = read_twit_cred(filename)
+    consumer_key = authent[0]
+    consumer_secret = authent[1]
+    access_key = authent[2]
+    access_secret = authent[3]
     # authorize twitter, initialize tweepy
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_key, access_secret)
@@ -49,13 +52,9 @@ def get_all_tweets(screen_name):
 
     # make initial request for most recent tweets (200 is the maximum allowed count)
     new_tweets = api.user_timeline(screen_name=screen_name, count=20)
-    # print(new_tweets)
-    # print(type(new_tweets))
+
     # save most recent tweets
     alltweets.extend(new_tweets)
-    # print(len(alltweets))
-    # for i in alltweets:
-    #     print(i.id)
 
     # save the id of the oldest tweet less one
     oldest = alltweets[-1].id - 1
@@ -69,8 +68,6 @@ def get_all_tweets(screen_name):
 
         # save most recent tweets
         alltweets.extend(new_tweets)
-        # for p in alltweets:
-        #     print(p.id)
 
         # update the id of the oldest tweet less one
         oldest = alltweets[-1].id - 1
@@ -78,28 +75,25 @@ def get_all_tweets(screen_name):
             break
         print("...%s tweets downloaded so far" % (len(alltweets)))
 
-
-
-    # write tweet objects to JSON
-    file = open('tweet.json', 'w')
-    print("Writing tweet objects to JSON please wait...")
-    # print(type(alltweets))
-    for status in alltweets:
-        json.dump(status._json, file, sort_keys=True, indent=4)
-
-    # close the file
-    print("Done")
-    file.close()
+    # uncomment the following lines if you need to write tweet objects to JSON
+    # file = open('tweet.json', 'w')
+    # print("Writing tweet objects to JSON please wait...")
+    # # print(type(alltweets))
+    # for status in alltweets:
+    #     json.dump(status._json, file, sort_keys=True, indent=4)
+    #
+    # # close the file
+    # print("Done")
+    # file.close()
     return alltweets
 
 
-
-# if __name__ == '__main__':
-#     # pass in the username of the account you want to download
-# get_all_tweets("@ZhongyuanCai")
-
-
 def get_media_url(alltweets):
+    """
+    To extract medial url from given tweet content
+    :param alltweets: given tweet content
+    :return: a List of all media url in the content
+    """
     media_files = list()
     for status in alltweets:
         media = status.extended_entities.get('media')
@@ -108,17 +102,22 @@ def get_media_url(alltweets):
             for i in range(leng):
                 media_files.append(media[i]['media_url'])
 
-    # print(media_files)
-    # print(len(media_files))
-    filefile = open('url.json', 'w')
-    print("writing url to Json, please wait...")
-    json.dump(media_files, filefile)
-    print("done")
-    filefile.close()
+    # uncomment the following lines if you need to print json file of url
+    # filefile = open('url.json', 'w')
+    # print("writing url to Json, please wait...")
+    # json.dump(media_files, filefile)
+    # print("done")
+    # filefile.close()
     return media_files
 
 
 def download_media(media_files):
+    """
+    To down load the media files from given media url,
+    then store all these files into "./images" folder
+    :param media_files: given media url
+    :return: None
+    """
     location = "./images/"
     i = 1
     leng = len(media_files)
@@ -130,14 +129,29 @@ def download_media(media_files):
     print("finishing download")
 
 
-def generate_video():
+def generate_video(framerate, cd, outcome):
+    """
+    generate video with ffmpeg with certain parameters
+    :param framerate: assign the frame rate of video
+    :param cd: assign the content source direction to make video
+    :param outcome: assign the name and format of video
+    :return: None
+    """
     print("start generating video")
-    subprocess.call('ffmpeg -f image2 -framerate 1/5 -y -i ./images/image%d.jpg -c:v libx264 -pix_fmt yuv420p out.mp4', shell=True)
+    subprocess.call('ffmpeg -f image2 -framerate ' + framerate +
+                    ' -y -i ' + cd + ' -c:v libx264 -pix_fmt yuv420p ' + outcome, shell=True)
     print("video is done")
     pass
 
 
 def resize_image(cd, width, height):
+    """
+    resize all the image down loaded to a uniform size to avoid difficulties in generating video
+    :param cd: the location of images
+    :param width: assign the width of size
+    :param height: assign the height of size
+    :return: None
+    """
     direction = os.getcwd()
     os.chdir(cd)
     for root, dirs, files in os.walk("."):
@@ -150,6 +164,11 @@ def resize_image(cd, width, height):
 
 
 def get_label(cd):
+    """
+    use google vision to get descriptions of images
+    :param cd: the direction where images are stored
+    :return: a two array List of labels of all images
+    """
     client = vision.ImageAnnotatorClient()
     label_all = []
     direction = os.getcwd()
@@ -178,6 +197,14 @@ def get_label(cd):
 
 
 def add_label(cd, label, fontsize, num):
+    """
+    draw labels on the corresponding image
+    :param cd: the direction where images are stored
+    :param label: the label acquired from google vision
+    :param fontsize: assign the fontsize of label
+    :param num: assign the number you place on the image
+    :return: None
+    """
     from PIL import Image, ImageDraw, ImageFont, ImageColor
     # name = './imagetest/image1.jpg'
     direction = os.getcwd()
@@ -205,10 +232,78 @@ def add_label(cd, label, fontsize, num):
     pass
 
 
-twitter_content = get_all_tweets("@ZhongyuanCai")
+def input_func(default):
+    """
+    A way to get input and set the default value
+    :param default: assign the default value if input is ""(nothing)
+    :return: the content you input or the default value if you do not input
+    """
+    inp = input(": ")
+    if not inp:
+        inp = default
+    else:
+        pass
+    return inp
+
+
+# Get your Twitter API credentials
+def read_twit_cred(filename):
+    """
+    read the credential of twitter API from a text file
+    (better to save in the same folder with this program if you do not want to assign the direction)
+    :param filename: the name of text file(maybe need to include the direction)
+    :return: the content read from text file
+    """
+    credential = io.open(filename, 'r')
+    temp = credential.read().splitlines()
+    credential.close()
+    return temp
+
+
+# this is the main part of program
+# ---------------------------------------------------
+# get the user name of the account
+print("please enter the use name you want(default press Enter)")
+name = input_func('@ZhongyuanCai')
+print("account is ", name)
+
+# get content from twitter
+twitter_content = get_all_tweets(name, 'twitter_api.txt')  # @ZhongyuanCai
+
+# extract url from content
 url = get_media_url(twitter_content)
+
+# download media from url
 download_media(url)
-resize_image("./images/", 1024, 768)
+
+# get the size and reshape images
+print("please input the width of image(default press Enter)")
+width = input_func(1024)
+print("please input the hight of image(default press Enter)")
+hight = input_func(768)
+print("width is ", width, 'hight is', hight)
+resize_image("./images/", int(width), int(hight))  # 1024, 768
+
+# get label of images from google vision
 label = get_label("./images")
-add_label("./images", label, 50, 3)
-generate_video()
+print("please input the fontsize of label(default press Enter)")
+
+# assign the fontsize and number of label, then place them on images
+fontsize = input_func(50)
+print("fontsize is ", fontsize)
+print("please input the number of label you want to add on the image(default press Enter)")
+num = input_func(3)
+add_label("./images", label, int(fontsize), int(num))  # 50, 3
+
+# assign the parameter of video and generate video
+print("input video framerate(default press Enter)")
+framerate = input_func('1/5')
+print("input image files direction(default press Enter)")
+cd = input_func('./images/image%d.jpg')
+print("input the name and format of the video")
+out = input_func('out.mp4')
+print("the video "+out+"will convert image from "+cd+"in framerate "+framerate)
+generate_video(framerate, cd, out)
+
+# You are All Set if you were here
+print("All set!")
