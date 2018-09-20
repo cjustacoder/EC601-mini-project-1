@@ -1,7 +1,7 @@
 # work-for-EC601
 Let's make the most simple instruction in case of that I'm running out of time.
 ## How to run this project
-1. First you should create a folder and download all the files in this project into this folder;
+1. First you should create a folder and download all the files in this project into this folder(video may not be necessary);
 2. Put your Google cloud credential(the json file) into this this folder;
 3. Creat a text file in this folder and copy your twitter credential into this file 
 make sure that you paste your keys and token with the following format:
