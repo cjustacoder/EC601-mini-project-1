@@ -20,5 +20,5 @@ set GOOGLE_APPLICATION_CREDENTIALS=My Project 27058-f61d3c8b09ce.json
 5. Edit 'myprojectcode.py', go to the line 271, replace the name of twitter credential file(created in step.3) by yours;
 6. To run the whole program, run the 'start_here.bat';
 7. You may enter any argument you want when system ask you, but to test the project better and make sure it works, I suggest that you can always press the "Enter"key to use my default value, and it will also be easier for you to test my code;
-8. I will show you the result and the process of running my code, so if there is any problem with my code, please send Issues to me, thanks; 
+8. I will show you the result and the process of running my code, so if there is any problem with my code, please send Issues to me, thanks.
 
