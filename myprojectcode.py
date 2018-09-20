@@ -111,21 +111,30 @@ def get_media_url(alltweets):
     return media_files
 
 
-def download_media(media_files):
+def download_media(media_files, number):
     """
     To down load the media files from given media url,
     then store all these files into "./images" folder
     :param media_files: given media url
+    :param number: given the number of media you want
     :return: None
     """
     location = "./images/"
     i = 1
     leng = len(media_files)
+    if leng > number:
+        leng = number
+    else:
+        pass
+
     for res in media_files:
         name = "image" + str(i) + ".jpg"
         urllib.request.urlretrieve(res, location + name)
         print("downloading Numb.", i, '/', leng)
         i += 1
+        if (i > number):
+            break
+
     print("finishing download")
 
 
@@ -273,8 +282,13 @@ twitter_content = get_all_tweets(name, 'twitter_api.txt')  # @ZhongyuanCai
 # extract url from content
 url = get_media_url(twitter_content)
 
+# get the number of image you want
+print("how many images do you want(default press Enter, all images)")
+number = input_func(len(url))
+print("number of images is", number)
+
 # download media from url
-download_media(url)
+download_media(url, int(number))
 
 # get the size and reshape images
 print("please input the width of image(default press Enter)")
