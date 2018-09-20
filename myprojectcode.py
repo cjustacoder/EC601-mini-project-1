@@ -55,9 +55,12 @@ def get_all_tweets(screen_name, filename):
 
     # save most recent tweets
     alltweets.extend(new_tweets)
-
+    try:
     # save the id of the oldest tweet less one
-    oldest = alltweets[-1].id - 1
+        oldest = alltweets[-1].id - 1
+    except:
+        sys.stderr.write("Failed to acquire tweets or there is no tweets in this account \n")
+        raise
     # print(oldest)
 
     # keep grabbing tweets until there are no tweets left to grab
@@ -95,12 +98,17 @@ def get_media_url(alltweets):
     :return: a List of all media url in the content
     """
     media_files = list()
-    for status in alltweets:
-        media = status.extended_entities.get('media')
-        leng = len(media)
-        if (len(media) > 0):
-            for i in range(leng):
-                media_files.append(media[i]['media_url'])
+    try:
+        for status in alltweets:
+            media = status.extended_entities.get('media')
+            leng = len(media)
+            if (len(media) > 0):
+                for i in range(leng):
+                    media_files.append(media[i]['media_url'])
+    except:
+        sys.stderr.write("Failed to acquire media from tweets or there is no media in tweets\n")
+        raise
+
 
     # uncomment the following lines if you need to print json file of url
     # filefile = open('url.json', 'w')
@@ -111,12 +119,13 @@ def get_media_url(alltweets):
     return media_files
 
 
-def download_media(media_files, number):
+def download_media(media_files, number, limit):
     """
     To down load the media files from given media url,
     then store all these files into "./images" folder
     :param media_files: given media url
     :param number: given the number of media you want
+    :param number: limitation of number of images
     :return: None
     """
     location = "./images/"
@@ -125,8 +134,11 @@ def download_media(media_files, number):
     if leng > number:
         leng = number
     else:
+        print("number of image beyond the content, download whole images\nnumber is ", leng)
         pass
-
+    if leng > limit:
+        leng = limit
+        number = limit
     for res in media_files:
         name = "image" + str(i) + ".jpg"
         urllib.request.urlretrieve(res, location + name)
@@ -178,7 +190,11 @@ def get_label(cd):
     :param cd: the direction where images are stored
     :return: a two array List of labels of all images
     """
-    client = vision.ImageAnnotatorClient()
+    try:
+        client = vision.ImageAnnotatorClient()
+    except:
+        sys.stderr.write('Some thing is wrong with Google Auth\n')
+        raise
     label_all = []
     direction = os.getcwd()
     os.chdir(cd)
@@ -194,7 +210,11 @@ def get_label(cd):
 
             image = types.Image(content=content)
             # Performs label detection on the image file
-            response = client.label_detection(image=image)
+            try:
+                response = client.label_detection(image=image)
+            except:
+                sys.stderr.write("Something is wrong with Google Vision API\n")
+                raise
             labels = response.label_annotations
             lab = []
 
@@ -287,8 +307,12 @@ print("how many images do you want(default press Enter, all images)")
 number = input_func(len(url))
 print("number of images is", number)
 
+# add limitation to number
+print("if you want to add limitation to the number of files, please enter,(default press Enter, 100 images)")
+limit = input_func(100)
+print("the number of images limitation is ", limit)
 # download media from url
-download_media(url, int(number))
+download_media(url, int(number), int(limit))
 
 # get the size and reshape images
 print("please input the width of image(default press Enter)")
@@ -316,7 +340,7 @@ print("input image files direction(default press Enter)")
 cd = input_func('./images/image%d.jpg')
 print("input the name and format of the video")
 out = input_func('out.mp4')
-print("the video "+out+"will convert image from "+cd+"in framerate "+framerate)
+print("the video "+out+" will convert image from "+cd+" in framerate "+framerate)
 generate_video(framerate, cd, out)
 
 # You are All Set if you were here
