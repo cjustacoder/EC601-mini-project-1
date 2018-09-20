@@ -12,6 +12,7 @@ make sure that you paste your keys and token with the following format:
 (Access token secret)
 ```
 make sure that you copy and paste, only paste your those four strings to each line as the same order as mentioned, without anything else, including space;
+
 4. Edit 'start_here.bat', replace the name to your google credential file name behind the "=", without space, as following;
 ```javascript
 set GOOGLE_APPLICATION_CREDENTIALS=My Project 27058-f61d3c8b09ce.json
