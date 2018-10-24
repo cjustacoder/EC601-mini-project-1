@@ -21,8 +21,8 @@ set GOOGLE_APPLICATION_CREDENTIALS=My Project 27058-f61d3c8b09ce.json
 6. Create an empty folder named "images" in the current folder;
 7. To start the whole program, run the 'start_here.bat';
 
-test for =
-===================================================================
+test for -
+-----------------------------------------------
 8. You may enter any argument you want when system ask you, but to test the project better and make sure it works, I suggest that you can always press the "Enter"key to use my default value, and it will also be easier for you to test my code;
 9. If you want to run my project more than once, please delete all the files in folder "images"
 10. I will show you the result and the process of running my code, so if there is any problem with my code, please send Issues to me, thanks.
