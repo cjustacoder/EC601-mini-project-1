@@ -2,10 +2,14 @@
 ## Useage
 The purpose of **Mini project 3** is to manage data in **Mini project 1**. There are two databases used in this project.
 > First is **MySQL**, it's a SQL database
+
 > Second is **MongoDB**, it's a Non-SQL database
 
+## What's new
+1. Rewrite **Mini project 1** to redirect data to database, in two database respectively.
+2. Write three API function for each database according to requirement.
 ## How to run this project
-# Mini Project 1 Part
+### Mini Project 1 Part
 1. First you should create a folder and download all the files in this project into this folder(video may not be necessary);
 2. Put your Google cloud credential(the json file) into this this folder;
 3. Creat a text file in this folder and copy your twitter credential into this file 
@@ -29,7 +33,7 @@ set GOOGLE_APPLICATION_CREDENTIALS=My Project 27058-f61d3c8b09ce.json
 9. If you want to run my project more than once, please delete all the files in folder "images"
 10. I will show you the result and the process of running my code, so if there is any problem with my code, please send Issues to me, thanks.
 
-# Mini Project 3 Part
+### Mini Project 3 Part
 1. Run ```MongoDB_API.py``` to test three API for MongoDB database, but first you need to have a valid collection which can let API work on.
 2. Run ```MySQL_API.py``` to test three API for MySQL database, but first you need to have a valid table which can let API work on.
 
