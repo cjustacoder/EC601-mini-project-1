@@ -300,7 +300,7 @@ def write_to_table(name, number, limit, url, label_all):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="LearMore!0922",
+        passwd="yourpassword",
         auth_plugin='mysql_native_password',
         database="mini_project_3"
     )
