@@ -1,0 +1,4 @@
+input the word you want to search: cat
+[[{'_id': ObjectId('5c01945f75e2e4325cd25ace'), 'name': '@ZhongyuanCai', 'image': 'image18', 'url': 'http://pbs.twimg.com/media/DnQhFusUcAAYKCR.jpg', 'descriptors': ['cat', 'whiskers', 'mammal', 'small to medium sized cats', 'cat like mammal', 'american shorthair', 'fauna', 'kitten', 'dragon li', 'domestic short haired cat']}, {'_id': ObjectId('5c01945f75e2e4325cd25ace'), 'name': '@ZhongyuanCai', 'image': 'image19', 'url': 'http://pbs.twimg.com/media/DnQhFu7VsAA-2CT.jpg', 'descriptors': ['cat', 'small to medium sized cats', 'mammal', 'siamese', 'cat like mammal', 'thai', 'fauna', 'whiskers', 'carnivoran', 'snout']}]]
+[{'_id': ObjectId('5c01945f75e2e4325cd25ace'), 'time': '2018-11-30 14:49:51.847503', 'name': '@ZhongyuanCai', 'number_of_image': 42}]
+The most popular descriptors is  sky
