@@ -37,8 +37,9 @@ set GOOGLE_APPLICATION_CREDENTIALS=My Project 27058-f61d3c8b09ce.json
 1. Run ```MongoDB_API.py``` to test three API for MongoDB database, but first you need to have a valid collection which can let API work on.
 2. Run ```MySQL_API.py``` to test three API for MySQL database, but first you need to have a valid table which can let API work on.
 
-P.S. All these API are importable as libraries
-P.S.S Remeber to replace the setting of database according to your own database before you run the code, I will hide my own password for security.
+**P.S.** All these API are importable as libraries
+
+**P.S.S** Remeber to replace the setting of database according to your own database before you run the code, I will hide my own password for security.
 
 ## Result Demo
 I will post the result of my work as ```.txt``` file to demonstrate the result of **Mini Project 3**, which can show how my **Mini Project 3** can work associated with **Mini Project 1**.
