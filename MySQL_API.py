@@ -5,7 +5,7 @@ def search_by_word(word):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="LearMore!0922",
+        passwd="yourpassword",
         auth_plugin='mysql_native_password',
         database="mini_project_3"
     )
@@ -29,7 +29,7 @@ def num_of_image(name):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="LearMore!0922",
+        passwd="yourpassword",
         auth_plugin='mysql_native_password',
         database="mini_project_3"
     )
@@ -51,7 +51,7 @@ def most_popular_des():
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="LearMore!0922",
+        passwd="yourpassword",
         auth_plugin='mysql_native_password',
         database="mini_project_3"
     )
