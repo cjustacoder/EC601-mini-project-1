@@ -38,20 +38,21 @@ set GOOGLE_APPLICATION_CREDENTIALS=My Project 27058-f61d3c8b09ce.json
 2. Run ```MySQL_API.py``` to test three API for MySQL database, but first you need to have a valid table which can let API work on.
 
 P.S. All these API are importable as libraries
+P.S.S Remeber to replace the setting of database according to your own database before you run the code, I will hide my own password for security.
 
-# Result Demo
+## Result Demo
 I will post the result of my work as ```.txt``` file to demonstrate the result of **Mini Project 3**, which can show how my **Mini Project 3** can work associated with **Mini Project 1**.
-All results are in the folder ```result``
-## mongodb.txt
+All results are in the folder ```result```
+### mongodb.txt
 This file shows how the data acquired in **Mini Project 1** organized in MogoDB database.
-## mysql.txt
+### mysql.txt
 This file shows how the data acquired in **Mini Project 1** organized in MySQL database.
-## mongodb_api.txt
+### mongodb_api.txt
 This file shows how APIs works in MogoDB database. The file contain the result of three APIs
 1. find_session_with_word: Search for certain words and retrieve which user/session that has this work in it. 
 2. num_of_image: Number of images per feed
 3. most_popular_des: Find most popular descriptors
-## mysql_api.txt
+### mysql_api.txt
 This file shows how APIs works in MySQL database. The file contain the result of three APIs
 1. search_by_word: Search for certain words and retrieve which user/session that has this work in it. 
 2. num_of_image: Number of images per feed
