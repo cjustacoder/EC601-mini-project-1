@@ -37,6 +37,7 @@ P.S. All these API are importable as libraries
 
 # Result Demo
 I will post the result of my work as ```.txt``` file to demonstrate the result of **Mini Project 3**, which can show how my **Mini Project 3** can work associated with **Mini Project 1**.
+All results are in the folder ```result``
 ## mongodb.txt
 This file shows how the data acquired in **Mini Project 1** organized in MogoDB database.
 ## mysql.txt
