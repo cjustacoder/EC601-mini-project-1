@@ -1,5 +1,6 @@
 # work-for-EC601
 Let's make the most simple instruction in case of that I'm running out of time.
+**If you want to check my MiniProject3, please switch to branch---miniproject3**
 ## How to run this project
 1. First you should create a folder and download all the files in this project into this folder(video may not be necessary);
 2. Put your Google cloud credential(the json file) into this this folder;
